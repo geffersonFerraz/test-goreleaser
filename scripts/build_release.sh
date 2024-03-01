@@ -34,6 +34,6 @@ for D in `go tool dist list | grep "$DESIRED_DIST_REGEXP"`; do
     mkdir -p "$SUBDIR"
 
     # BUILD CLI
-    GOOS="$OS" GOARCH="$ARCH" go build -buildvcs=false -tags "$TAGS" -ldflags "$LDFLAGS -X magalu.cloud/sdk.Version=$VERSION" -o "$SUBDIR/$NAME$EXT" "$ENTRYPOINT"
+    GOOS="$OS" GOARCH="$ARCH" go build -buildvcs=false -tags "$TAGS" -o "$SUBDIR/$NAME$EXT" "$ENTRYPOINT"
 
 done
