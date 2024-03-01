@@ -32,20 +32,20 @@ jobs:
           CHECK_RELEASE: 0
         run: ./scripts/build_release.sh
 
-  release:
-    if: github.ref_type == 'tag'
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '>=1.17.0'
-          cache-dependency-path: "**/go.sum"
-      - name: Build and Zip Assets
-        env:
-          VERSION: ${{ github.ref_name }}
-        run: "bash ./scripts/build_release.sh zip"
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: build/**/*
+  # release:
+  #   if: github.ref_type == 'tag'
+  #   runs-on: ubuntu-latest
+  #   permissions: write-all
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '>=1.17.0'
+  #         cache-dependency-path: "**/go.sum"
+  #     - name: Build and Zip Assets
+  #       env:
+  #         VERSION: ${{ github.ref_name }}
+  #       run: "bash ./scripts/build_release.sh zip"
+  #     - uses: softprops/action-gh-release@v1
+  #       with:
+  #         files: build/**/*
