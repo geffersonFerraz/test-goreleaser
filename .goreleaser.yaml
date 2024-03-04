@@ -21,9 +21,13 @@ brews:
   -
     name: mgccli
     homepage: "https://github.com/geffersonFerraz/test-goreleaser"
-    tap:
+    repository:
       owner: geffersonFerraz
       name: homebrew-test
+      token: "{{ .Env.GITHUB_TOKEN }}"
     commit_author:
       name: geffersonFerraz
       email: me@gefferson.com.br
+    url_headers:
+      - "Accept: application/octet-stream"
+      - 'Authorization: bearer #{ENV["GITHUB_TOKEN"]}'
