@@ -9,8 +9,8 @@ builds:
       - amd64
       - arm64
 nfpms:
-- maintainer: Carlos A Becker <root@carlosbecker.dev>
-  description: Sample project.
+- maintainer: Gefferson Ferraz <me@gefferson.com.br>
+  description: Test GO Releaser.
   homepage: https://github.com/geffersonFerraz/test-goreleaser
   license: MIT
   formats:
@@ -20,7 +20,7 @@ nfpms:
 brews:
   -
     name: mgccli
-    homepage: "https://github.com/geffersonFerraz/test-goreleaser"  
+    homepage: "https://test.geff.ws/download/cli/latest"  
     repository:
       owner: geffersonFerraz
       name: homebrew-test
@@ -28,3 +28,5 @@ brews:
     commit_author:
       name: geffersonFerraz
       email: me@gefferson.com.br
+    url_template: "http://test.geff.ws/download/cli/{{ .Tag }}/{{ .ArtifactName }}"
+

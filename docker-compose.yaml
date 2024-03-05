@@ -1,0 +1,26 @@
+version: "3.5"
+services:
+  api01: &api
+    image: registry.geff.ws/test-goreleaser/releaser:v0.1.5
+    container_name: api01
+    ports:
+      -  6969:6969
+    volumes:
+            - ./downloads:/app/downloads
+    deploy:
+      resources:
+        limits:
+          cpus: "0.35"
+          memory: "50mb"
+    restart: always
+
+  api02:
+    <<: *api
+    container_name: api02
+    ports:
+      -  6869:6969
+
+networks:
+  default:
+    driver: bridge
+    name: test-releaser
