@@ -72,3 +72,33 @@ networks:
 -   https://test.geff.ws/download/cli/0.0.12/darwinarm64.tar.gz to download the package of version 0.0.12
 
 -   https://test.geff.ws/download/cli/latest/darwinarm64.tar.gz to download the package of de latest version
+
+## diagram:
+```mermaid
+sequenceDiagram
+    box Gray Dev
+    participant Dev
+    participant GIT
+    participant ActionGoReleaser
+    end
+    box Gray Cliente
+    participant Cliente
+    participant API
+    participant ServerAPI
+    end
+    autonumber
+    actor Dev
+    Dev->>+GIT: Gera uma TAG e sobe
+    GIT->>+ActionGoReleaser: Valida pipeline e dispara releaser
+    ActionGoReleaser-->>-GIT: Gera a release
+    actor Cliente
+    Cliente->>+API: Bate na API em busca da versão x
+    Note over Cliente, API: Pode ser tanto cliente num navegador <br/>com o link direto ou homebrew
+    API->>+GIT: Solicita os detalhes da release informada ou latest.
+    GIT-->>API: Volta detalhes e listagem dos pacotes
+    API->>+ServerAPI: Verifica se o pacote solicitado já existe
+    API-->>Cliente: Se existe a API já devolte pro cliente
+    API->>+GIT: Quando o pacote não existe local, Busca o pacote.
+    GIT-->>ServerAPI: Salva o novo pacote
+    API-->>Cliente: Disponibiliza o novo pacote
+```
