@@ -14,7 +14,7 @@
                 "SERVER_IP": "0.0.0.0",
                 "SERVER_PORT": "8080",
                 "GIT_OWNER_PROJECT":"geffersonFerraz/test-goreleaser",
-                "GIT_PERSONAL_TOKEN":"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",
+                "GIT_PERSONAL_TOKEN":"revoked",
                 "SERVER_URL":"localhost:8080"
             }
         }
