@@ -167,12 +167,14 @@ func run(w http.ResponseWriter, r *http.Request) {
 	if getLatest {
 		req, err = http.NewRequest("GET", GIT_LATEST_URL, nil)
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	} else {
 		req, err = http.NewRequest("GET", fmt.Sprintf(GIT_TAG_URL, versionRequested), nil)
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 
@@ -184,15 +186,13 @@ func run(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("fail to download file.")
 		fmt.Println(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("fail to fetch from github"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if resp.StatusCode != http.StatusOK {
 		fmt.Println("wrong status from get release")
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("fail to fetch from github"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -201,8 +201,7 @@ func run(w http.ResponseWriter, r *http.Request) {
 
 	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		fmt.Println("fail to get release info")
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("fail to fetch from github"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -235,8 +234,7 @@ func run(w http.ResponseWriter, r *http.Request) {
 			reqFile, err := http.NewRequest("GET", a.URL, nil)
 			if err != nil {
 				fmt.Println("fail create http request")
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte("fail to fetch from github"))
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			reqFile.Header.Add("Authorization", GIT_PERSONAL_TOKEN)
@@ -247,8 +245,7 @@ func run(w http.ResponseWriter, r *http.Request) {
 			out, err := os.Create(filepath.Join(folderPath, a.Name))
 			if err != nil {
 				fmt.Println("fail to create file")
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte("fail to fetch from github"))
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			defer out.Close()
@@ -257,16 +254,14 @@ func run(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("fail to download file..")
 				fmt.Println(err.Error())
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte("fail to fetch from github"))
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 
 			_, err = io.Copy(out, respFile.Body)
 			if err != nil {
 				fmt.Println("fail to save downloaded file")
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte("fail to fetch from github"))
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 
@@ -278,7 +273,8 @@ func run(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		response, err := json.Marshal(allAssets)
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		w.Write(response)
 		return
@@ -293,8 +289,7 @@ func run(w http.ResponseWriter, r *http.Request) {
 	file, err := os.OpenFile(fullName, os.O_RDONLY, 0644)
 	if err != nil {
 		fmt.Println("Fail to get open file")
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer file.Close()
@@ -303,19 +298,23 @@ func run(w http.ResponseWriter, r *http.Request) {
 	fileInfo, err := file.Stat()
 	if err != nil {
 		fmt.Println("Fail to get file stats")
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", fileInfo.Size()))
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK) //-- superfluous response.WriteHeader
 }
 
 func reconstructName(name []string, startIn int) string {
 	result := ""
 	for y, x := range name {
 		if y >= startIn {
-			result = fmt.Sprintf("%s%s", result, x)
+			if result == "" {
+				result = x
+				continue
+			}
+			result = fmt.Sprintf("%s_%s", result, x)
+
 		}
 	}
 	return result
