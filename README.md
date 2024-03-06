@@ -69,9 +69,9 @@ networks:
 ### examples: 
 -   https://test.geff.ws/download/cli/latest
 
--   https://test.geff.ws/download/cli/0.1.0/darwinarm64.tar.gz to download the package of version 0.1.0
+-   [https://test.geff.ws/download/cli/0.1.0/darwin_arm64.tar.gz](http://test.geff.ws/download/cli/0.1.0/darwin_arm64.tar.gz") to download the package of version 0.1.0
 
--   https://test.geff.ws/download/cli/latest/darwinarm64.tar.gz to download the package of de latest version
+-   [http://test.geff.ws/download/cli/latest/darwin_arm64.tar.gz"](http://test.geff.ws/download/cli/latest/darwin_arm64.tar.gz") to download the package of de latest version
 
 ## diagram:
 ```mermaid
