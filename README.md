@@ -69,7 +69,7 @@ networks:
 ### examples: 
 -   https://test.geff.ws/download/cli/latest
 
--   https://test.geff.ws/download/cli/0.0.12/darwinarm64.tar.gz to download the package of version 0.0.12
+-   https://test.geff.ws/download/cli/0.1.0/darwinarm64.tar.gz to download the package of version 0.1.0
 
 -   https://test.geff.ws/download/cli/latest/darwinarm64.tar.gz to download the package of de latest version
 
