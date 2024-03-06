@@ -1,0 +1,70 @@
+project_name: mgccli
+builds:
+  # - env: [CGO_ENABLED=0]
+  #   id: "terraform"
+  #   goos:
+  #     - linux
+  #     - windows
+  #     - darwin
+  #     - freebsd
+  #   goarch:
+  #     - amd64
+  #     - arm64
+  #   binary: terraform-provider-mgc 
+  #   ldflags:
+  #     - -s -w -X magalu.cloud/sdk.Version={{.Version}}"
+  #   flags:
+  #     - -tags=-embed release
+  #   main: mgc/terraform-provider-mgc/main.go 
+  - env: [CGO_ENABLED=0]
+    id: "cli"
+    goos:
+      - linux
+      - windows
+      - darwin
+      - freebsd
+    goarch:
+      - amd64
+      - arm64
+    binary: mgccli 
+    ldflags:
+      - -s -w -X magalu.cloud/sdk.Version={{.Version}}"
+    flags:
+      - -tags=-embed release
+    main: main.go
+    # main: mgc/cli/main.go   
+
+archives:
+- id: bincli
+  builds:
+      - cli
+
+
+nfpms:
+- maintainer: Gefferson Ferraz <me@gefferson.com.br>
+  description: Test GO Releaser.
+  homepage: https://github.com/geffersonFerraz/test-goreleaser
+  license: MIT
+  formats:
+  - deb
+  - rpm
+  builds:
+      - cli
+      - terraform
+
+brews:
+  -
+
+    name: mgccli
+    homepage: "https://test.geff.ws/download/cli/latest"  
+    repository:
+      owner: geffersonFerraz
+      name: homebrew-test
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    commit_author:
+      name: geffersonFerraz
+      email: me@gefferson.com.br
+    url_template: "http://test.geff.ws/download/cli/{{ .Tag }}/{{ .ArtifactName }}"
+    ids:
+    - foo
+
